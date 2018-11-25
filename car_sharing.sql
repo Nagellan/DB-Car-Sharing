@@ -201,20 +201,52 @@ CREATE TABLE IF NOT EXISTS "app_provider_CarParts"
   "carpart_id" integer NOT NULL REFERENCES "app_carpart" ("id") DEFERRABLE INITIALLY DEFERRED
 );
 
-CREATE INDEX "app_customer_CustomerCallCentre_id_842d20b9" ON "app_customer" ("CustomerCallCentre_id");
-CREATE INDEX "app_callcentreagent_AgentCallCentre_id_756771ad" ON "app_callcentreagent" ("AgentCallCentre_id");
-CREATE INDEX "app_feedback_CustomerFeedback_id_2ac8aae4" ON "app_feedback" ("CustomerFeedback_id");
-CREATE INDEX "app_feedback_FeedbackResearchCentre_id_25aa23e7" ON "app_feedback" ("FeedbackResearchCentre_id");
-CREATE INDEX "app_carsoft_CarSoftResearchCentre_id_9a5b1d82" ON "app_carsoft" ("CarSoftResearchCentre_id");
-CREATE INDEX "app_researcher_ResearcherResearchCentre_id_40945016" ON "app_researcher" ("ResearcherResearchCentre_id");
-CREATE INDEX "app_plug_PlugCS_id_a5abc1a1" ON "app_plug" ("PlugCS_id");
-CREATE INDEX "app_vehicle_VehicleCarSoft_id_16b21a2c" ON "app_vehicle" ("VehicleCarSoft_id");
-CREATE INDEX "app_vehicle_VehicleCS_id_45cb576a" ON "app_vehicle" ("VehicleCS_id");
-CREATE INDEX "app_vehicle_VehicleWorkshop_id_32c65edf" ON "app_vehicle" ("VehicleWorkshop_id");
-CREATE UNIQUE INDEX "app_workshop_WorkshopCarParts_workshop_id_carpart_id_1810fd13_uniq" ON "app_workshop_WorkshopCarParts" ("workshop_id", "carpart_id");
-CREATE INDEX "app_workshop_WorkshopCarParts_workshop_id_2c92bcba" ON "app_workshop_WorkshopCarParts" ("workshop_id");
-CREATE INDEX "app_workshop_WorkshopCarParts_carpart_id_8326c940" ON "app_workshop_WorkshopCarParts" ("carpart_id");
-CREATE UNIQUE INDEX "app_provider_CarParts_provider_id_carpart_id_d4de3c1e_uniq" ON "app_provider_CarParts" ("provider_id", "carpart_id");
-CREATE INDEX "app_provider_CarParts_provider_id_a18a1cf7" ON "app_provider_CarParts" ("provider_id");
-CREATE INDEX "app_provider_CarParts_carpart_id_90bdd7ee" ON "app_provider_CarParts" ("carpart_id");
+CREATE INDEX "app_customer_CustomerCallCentre_id_842d20b9"
+ON "app_customer" ("CustomerCallCentre_id");
+
+CREATE INDEX "app_callcentreagent_AgentCallCentre_id_756771ad"
+ON "app_callcentreagent" ("AgentCallCentre_id");
+
+CREATE INDEX "app_feedback_CustomerFeedback_id_2ac8aae4"
+ON "app_feedback" ("CustomerFeedback_id");
+
+CREATE INDEX "app_feedback_FeedbackResearchCentre_id_25aa23e7"
+ON "app_feedback" ("FeedbackResearchCentre_id");
+
+CREATE INDEX "app_carsoft_CarSoftResearchCentre_id_9a5b1d82"
+ON "app_carsoft" ("CarSoftResearchCentre_id");
+
+CREATE INDEX "app_researcher_ResearcherResearchCentre_id_40945016"
+ON "app_researcher" ("ResearcherResearchCentre_id");
+
+CREATE INDEX "app_plug_PlugCS_id_a5abc1a1"
+ON "app_plug" ("PlugCS_id");
+
+CREATE INDEX "app_vehicle_VehicleCarSoft_id_16b21a2c"
+ON "app_vehicle" ("VehicleCarSoft_id");
+
+CREATE INDEX "app_vehicle_VehicleCS_id_45cb576a"
+ON "app_vehicle" ("VehicleCS_id");
+
+CREATE INDEX "app_vehicle_VehicleWorkshop_id_32c65edf"
+ON "app_vehicle" ("VehicleWorkshop_id");
+
+CREATE UNIQUE INDEX "app_workshop_WorkshopCarParts_workshop_id_carpart_id_1810fd13_uniq"
+ON "app_workshop_WorkshopCarParts" ("workshop_id", "carpart_id");
+
+CREATE INDEX "app_workshop_WorkshopCarParts_workshop_id_2c92bcba"
+ON "app_workshop_WorkshopCarParts" ("workshop_id");
+
+CREATE INDEX "app_workshop_WorkshopCarParts_carpart_id_8326c940"
+ON "app_workshop_WorkshopCarParts" ("carpart_id");
+
+CREATE UNIQUE INDEX "app_provider_CarParts_provider_id_carpart_id_d4de3c1e_uniq"
+ON "app_provider_CarParts" ("provider_id", "carpart_id");
+
+CREATE INDEX "app_provider_CarParts_provider_id_a18a1cf7"
+ON "app_provider_CarParts" ("provider_id");
+
+CREATE INDEX "app_provider_CarParts_carpart_id_90bdd7ee"
+ON "app_provider_CarParts" ("carpart_id");
+
 COMMIT;

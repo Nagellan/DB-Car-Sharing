@@ -1,4 +1,5 @@
 import sqlite3
+import GUI as ui
 
 
 def fill_db():
@@ -19,3 +20,5 @@ connection = sqlite3.connect('car_sharing.db')
 cursor = connection.cursor()
 
 connection.close()
+
+ui.create_window()

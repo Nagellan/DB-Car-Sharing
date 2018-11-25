@@ -1,5 +1,8 @@
 import tkinter as tk
 
+LIGHT_PINK = '#F1A2D2'
+PINK = '#E467B3'
+
 
 class MainWindow:
     def __init__(self):
@@ -25,13 +28,22 @@ class SelectsPanel:
         def update_scroll(event):
             canvas.configure(scrollregion=canvas.bbox("all"))
 
+        def on_mousewheel(event):
+            canvas.yview_scroll(round(-1 * (event.delta / 70)), "units")
+
+        def bind_tree(widget, event, callback):
+            widget.bind(event, callback)
+
+            for child in widget.children.values():
+                bind_tree(child, event, callback)
+
         s_panel = tk.Frame(root)
         s_panel.grid(column=1, row=0, sticky='ns')
 
-        canvas = tk.Canvas(s_panel, bg='#F1A2D2', width=round(width/13))
+        canvas = tk.Canvas(s_panel, bg=LIGHT_PINK, width=round(width/13))
         canvas.pack(side='left', fill='y')
 
-        s_panel_scroll = tk.Frame(canvas, bg='#F1A2D2')
+        s_panel_scroll = tk.Frame(canvas, bg=LIGHT_PINK)
 
         for i in range(1, 11):
             select_1 = tk.Button(s_panel_scroll, text='Select ' + str(i), padx=10, pady=10, bg='white', relief=tk.FLAT,
@@ -46,12 +58,44 @@ class SelectsPanel:
         canvas.create_window(0, 0, window=s_panel_scroll, anchor=tk.CENTER)
 
         s_panel_scroll.bind("<Configure>", update_scroll)
+        bind_tree(canvas, "<MouseWheel>", on_mousewheel)
 
 
 class TablePanel:
     def __init__(self, root, width, height):
-        t_panel = tk.Frame(root, bg='#E467B3')
+        def update_scroll(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_mousewheel(event):
+            canvas.yview_scroll(round(-1 * (event.delta / 70)), "units")
+
+        def bind_tree(widget, event, callback):
+            widget.bind(event, callback)
+
+            for child in widget.children.values():
+                bind_tree(child, event, callback)
+
+        t_panel = tk.Frame(root, bg=PINK)
         t_panel.grid(column=0, row=0, sticky='nwse')
+
+        canvas = tk.Canvas(t_panel, bg=PINK)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
+
+        t_panel_scroll = tk.Frame(canvas, bg='red')
+
+        for i in range(1, 11):
+            for j in range(10):
+                label = tk.Label(t_panel_scroll, text=str(j)+"kekekke")
+                label.grid(column=j, row=i)
+
+        scroll = tk.Scrollbar(t_panel, orient='vertical', command=canvas.yview)
+        scroll.pack(side='right', fill='y')
+
+        canvas.configure(yscrollcommand=scroll.set)
+        canvas.create_window(0, 0, window=t_panel_scroll, anchor=tk.CENTER)
+
+        t_panel_scroll.bind("<Configure>", update_scroll)
+        bind_tree(canvas, "<MouseWheel>", on_mousewheel)
 
 
 def create_window():

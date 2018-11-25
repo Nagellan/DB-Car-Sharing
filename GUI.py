@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 LIGHT_PINK = '#F1A2D2'
 PINK = '#E467B3'
@@ -33,7 +34,7 @@ class ScrollBar:
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def on_mousewheel(self, event, canvas):
-        canvas.yview_scroll(round((event.delta / 70)), "units")
+        canvas.yview_scroll(round(-1 * (event.delta / 70)), "units")
 
     def bind_tree(self, widget, event, callback):
         widget.bind(event, callback)
@@ -71,31 +72,35 @@ class SelectsPanel:
 
 
 class TablePanel:
-    def __init__(self, root, width, height):
-        t_panel = tk.Frame(root, bg=PINK)
+    def __init__(self, root):
+        t_panel = ttk.Notebook(root)
         t_panel.grid(column=0, row=0, sticky='nwse')
 
-        canvas = tk.Canvas(t_panel, bg=PINK)
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
+        for i in range(3):
+            t_panel_in = tk.Frame(t_panel)
 
-        t_panel_scroll = tk.Frame(canvas)
+            canvas = tk.Canvas(t_panel_in, bg=PINK)
+            canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
 
-        self.fill_table(t_panel_scroll)
+            t_panel_scroll = tk.Frame(canvas)
 
-        scroll = ScrollBar(t_panel, canvas)
+            self.fill_table(t_panel_scroll, i)
 
-        canvas.configure(yscrollcommand=scroll.item.set)
-        canvas.create_window(0, 0, window=t_panel_scroll, anchor=tk.CENTER)
+            scroll = ScrollBar(t_panel_in, canvas)
 
-        t_panel_scroll.bind("<Configure>", lambda event: scroll.update(event, canvas))
-        scroll.bind_tree(canvas, "<MouseWheel>", lambda event: scroll.on_mousewheel(event, canvas))
+            canvas.configure(yscrollcommand=scroll.item.set)
+            canvas.create_window(0, 0, window=t_panel_scroll, anchor="nw")
 
-    def fill_table(self, parent):
+            t_panel_scroll.bind("<Configure>", lambda event: scroll.update(event, canvas))
+            scroll.bind_tree(canvas, "<MouseWheel>", lambda event: scroll.on_mousewheel(event, canvas))
+
+            t_panel.add(t_panel_in, text=str(i)+'kek')
+
+    def fill_table(self, parent, lul):
         for i in range(1, 21):
-            for j in range(10):
-                label = tk.Label(parent, text=str(j)+"kekekke")
+            for j in range(12):
+                label = tk.Label(parent, text=str(j)+"kekekk " + str(lul))
                 label.grid(column=j, row=i)
-
 
 
 def create_window():
@@ -105,6 +110,6 @@ def create_window():
     w_height = m_window.s_height
 
     SelectsPanel(root, w_width)
-    TablePanel(root, w_width, w_height)
+    TablePanel(root)
 
     root.mainloop()

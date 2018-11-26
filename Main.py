@@ -19,6 +19,13 @@ def save():
 connection = sqlite3.connect('car_sharing.db')
 cursor = connection.cursor()
 
+queries = open("queries.sql", 'r')
+selects = []
+for line in queries:
+    cursor.execute(line[:-1])
+    selects.append(cursor.fetchall())
+
+save()
 connection.close()
 
-ui.create_window()
+ui.create_window(selects, [])

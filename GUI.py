@@ -14,7 +14,7 @@ class MainWindow:
         s_width = round(root.winfo_screenwidth()*0.8)  # screen width
         s_height = round(root.winfo_screenheight()*0.8)  # screen width
 
-        root.geometry(str(s_width) + 'x' + str(s_height))
+        # root.geometry(str(s_width) + 'x' + str(s_height))
 
         root.grid_columnconfigure(index=0, weight=1)
         root.grid_rowconfigure(index=0, weight=1)
@@ -42,8 +42,19 @@ class ScrollBar:
             self.bind_tree(child, event, callback)
 
 
+def fill_table(parent, table):
+    i = 0
+    for row in table:
+        j = 0
+        for cell in row:
+            label = tk.Label(parent, text=cell, bd=8, bg='white')
+            label.grid(column=j, row=i, padx=2, pady=2)
+            j = j + 1
+        i = i + 1
+
+
 class SelectsPanel:
-    def __init__(self, root, width):
+    def __init__(self, root, width, selects):
         s_panel = tk.Frame(root)
         s_panel.grid(column=1, row=0, sticky='ns')
 
@@ -52,7 +63,7 @@ class SelectsPanel:
 
         s_panel_scroll = tk.Frame(canvas, bg=LIGHT_PINK)
 
-        self.fill_buttons(s_panel_scroll)
+        self.fill_buttons(s_panel_scroll, selects)
 
         scroll = ScrollBar(s_panel, canvas)
 
@@ -62,16 +73,25 @@ class SelectsPanel:
         s_panel_scroll.bind("<Configure>", lambda event: scroll.update(event, canvas))
         scroll.bind_tree(canvas, "<MouseWheel>", lambda event: scroll.on_mousewheel(event, canvas))
 
-    def fill_buttons(self, parent):
-        for i in range(1, 11):
+        self.s_panel = s_panel
+
+    def fill_buttons(self, parent, selects):
+        i = 1
+        for select in selects:
             select_1 = tk.Button(parent, text='SELECT ' + str(i), padx=10, pady=10, bg='white',
-                                 relief=tk.FLAT, overrelief=tk.GROOVE, highlightthickness=0)
+                                 relief=tk.FLAT, overrelief=tk.GROOVE, highlightthickness=0,
+                                 command=lambda sel=select: self.open_window(sel))
             select_1.grid(column=0, row=i, sticky='we')
             select_1.grid_configure(padx=10, pady=5)
+            i = i + 1
+
+    def open_window(self, table):
+        pop_up = tk.Toplevel(self.s_panel)
+        fill_table(pop_up, table)
 
 
 class TablePanel:
-    def __init__(self, root):
+    def __init__(self, root, tables):
         def switch_tab(event):
             tab = event.widget.winfo_children()[event.widget.index("current")].winfo_children()[0]
             scroll.bind_tree(tab, "<MouseWheel>", lambda _event: scroll.on_mousewheel(_event, tab))
@@ -89,7 +109,7 @@ class TablePanel:
 
             t_panel_scroll = tk.Frame(canvas)
 
-            self.fill_table(t_panel_scroll, i)
+            fill_table(t_panel_scroll, [])
 
             scroll = ScrollBar(t_panel_in, canvas)
 
@@ -100,20 +120,13 @@ class TablePanel:
 
             t_panel.add(t_panel_in, text=str(i)+'kek')
 
-    def fill_table(self, parent, lul):
-        for i in range(1, 21):
-            for j in range(12):
-                label = tk.Label(parent, text=str(j)+"kekekk " + str(lul))
-                label.grid(column=j, row=i)
 
-
-def create_window():
+def create_window(selects, tables):
     m_window = MainWindow()
     root = m_window.item
     w_width = m_window.s_width
-    w_height = m_window.s_height
 
-    SelectsPanel(root, w_width)
-    TablePanel(root)
+    SelectsPanel(root, w_width, selects)
+    TablePanel(root, tables)
 
     root.mainloop()

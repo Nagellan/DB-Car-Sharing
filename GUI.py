@@ -38,7 +38,6 @@ class ScrollBar:
 
     def bind_tree(self, widget, event, callback):
         widget.bind(event, callback)
-
         for child in widget.children.values():
             self.bind_tree(child, event, callback)
 
@@ -65,18 +64,24 @@ class SelectsPanel:
 
     def fill_buttons(self, parent):
         for i in range(1, 11):
-            select_1 = tk.Button(parent, text='Select ' + str(i), padx=10, pady=10, bg='white', relief=tk.FLAT,
-                                 overrelief=tk.GROOVE, highlightthickness=0)
+            select_1 = tk.Button(parent, text='SELECT ' + str(i), padx=10, pady=10, bg='white',
+                                 relief=tk.FLAT, overrelief=tk.GROOVE, highlightthickness=0)
             select_1.grid(column=0, row=i, sticky='we')
             select_1.grid_configure(padx=10, pady=5)
 
 
 class TablePanel:
     def __init__(self, root):
+        def switch_tab(event):
+            tab = event.widget.winfo_children()[event.widget.index("current")].winfo_children()[0]
+            scroll.bind_tree(tab, "<MouseWheel>", lambda _event: scroll.on_mousewheel(_event, tab))
+            tab.bind("<Configure>", lambda _event: scroll.update(_event, tab))
+            tab.configure(scrollregion=tab.bbox("all"))
+
         t_panel = ttk.Notebook(root)
         t_panel.grid(column=0, row=0, sticky='nwse')
 
-        for i in range(3):
+        for i in range(6):
             t_panel_in = tk.Frame(t_panel)
 
             canvas = tk.Canvas(t_panel_in, bg=PINK)
@@ -91,8 +96,7 @@ class TablePanel:
             canvas.configure(yscrollcommand=scroll.item.set)
             canvas.create_window(0, 0, window=t_panel_scroll, anchor="nw")
 
-            t_panel_scroll.bind("<Configure>", lambda event: scroll.update(event, canvas))
-            scroll.bind_tree(canvas, "<MouseWheel>", lambda event: scroll.on_mousewheel(event, canvas))
+            t_panel.bind("<<NotebookTabChanged>>", lambda event: switch_tab(event))
 
             t_panel.add(t_panel_in, text=str(i)+'kek')
 

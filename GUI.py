@@ -11,8 +11,8 @@ class MainWindow:
         root.title("Car sharing system")
         root.iconbitmap(default="favicon.ico")
 
-        s_width = round(root.winfo_screenwidth()*0.8)  # screen width
-        s_height = round(root.winfo_screenheight()*0.8)  # screen width
+        s_width = round(root.winfo_screenwidth()*0.8)       # screen width
+        s_height = round(root.winfo_screenheight()*0.8)     # screen width
 
         root.geometry(str(s_width) + 'x' + str(s_height))
 
@@ -46,7 +46,6 @@ def fill_table(parent, table):
     i = 0
     for row in table:
         j = 0
-        print(row)
         for cell in row:
             label = tk.Label(parent, text=cell, bd=8, bg='white')
             label.grid(column=j, row=i, padx=2, pady=2)
@@ -79,9 +78,9 @@ class SelectsPanel:
     def fill_buttons(self, parent, selects):
         i = 1
         for select in selects:
-            select_1 = tk.Button(parent, text='SELECT ' + str(i), padx=10, pady=10, bg='white',
+            select_1 = tk.Button(parent, text=select[0], padx=10, pady=10, bg='white',
                                  relief=tk.FLAT, overrelief=tk.GROOVE, highlightthickness=0,
-                                 command=lambda sel=select: self.open_window(sel))
+                                 command=lambda sel=select[1]: self.open_window(sel))
             select_1.grid(column=0, row=i, sticky='we')
             select_1.grid_configure(padx=10, pady=5)
             i = i + 1

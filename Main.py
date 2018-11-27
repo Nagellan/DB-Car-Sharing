@@ -23,6 +23,11 @@ def save():
 
 
 def select_1():
+    cursor.execute("SELECT * FROM app_vehicle WHERE Color = 'red' AND LicensePlate LIKE 'AN%';")
+    return cursor.fetchall()
+
+
+def select_2():
     data = []
     for j in range(24):
         format = "%Y-%m-%d %H:%M:%S"
@@ -31,12 +36,13 @@ def select_1():
             date_right = datetime.datetime(2018, 11, 1, j, 59, 59)
         else:
             date_right = datetime.datetime(2018, 11, 1, j + 1, 0, 0)
-        cursor.execute("SELECT count(*) FROM 'app_charging' WHERE Date >= '" + date_left.strftime(format) + "' AND Date <= '" + date_right.strftime(format) + "'")
+        cursor.execute("SELECT count(*) FROM 'app_charging' WHERE Date >= '" + date_left.strftime(format) +
+                       "' AND Date <= '" + date_right.strftime(format) + "'")
         data.append((date_left.strftime(format) + "->" + date_right.strftime(format), cursor.fetchone()))
     return data
 
 
-def select_2():
+def select_3():
     morning = 0
     afternoon = 0
     evening = 0
@@ -86,15 +92,22 @@ def select_2():
 
 
 def select_4():
+    cursor.execute("SELECT * FROM app_payment INNER JOIN (SELECT OrderPayment_id as orderIDS FROM app_order WHERE OrdersCustomer_id = 0) ON app_payment.id = orderIDS WHERE DateTime > '2018-10-01 00:00:00'")
+    return cursor.fetchall()
+
+
+def select_7():
     cursor.execute("SELECT count(*) AS value_occurrence FROM app_vehicle INNER JOIN (SELECT TripVehicle_id as tvid FROM app_trip WHERE Departure > '2018-12-01 10:20:30') ON app_vehicle.id = tvid ORDER BY 'value_occurrence' DESC")
     return cursor.fetchall()
 
 
 def get_selects():
     _selects = [
-        select_1(),
-        select_2(),
-        select_4()
+        ("SELECT 1", select_1()),
+        ("SELECT 2", select_2()),
+        ("SELECT 3", select_3()),
+        ("SELECT 4", select_4()),
+        ("SELECT 7", select_7())
     ]
 
     return _selects
@@ -104,10 +117,16 @@ def get_full_db():
     data = []
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     table_names = list(map(lambda x: x[0], cursor.fetchall()))
+
     table_names.remove("sqlite_sequence")
     for t_name in table_names:
+        cursor.execute("PRAGMA table_info(" + t_name + ");")
+        col_names = list(map(lambda x: x[1], cursor.fetchall()))
+
         cursor.execute("SELECT * FROM "+t_name)
-        data.append((t_name, cursor.fetchall()))
+        table = [col_names] + cursor.fetchall()
+
+        data.append((t_name, table))
     return data
 
 

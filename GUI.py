@@ -14,7 +14,7 @@ class MainWindow:
         s_width = round(root.winfo_screenwidth()*0.8)  # screen width
         s_height = round(root.winfo_screenheight()*0.8)  # screen width
 
-        # root.geometry(str(s_width) + 'x' + str(s_height))
+        root.geometry(str(s_width) + 'x' + str(s_height))
 
         root.grid_columnconfigure(index=0, weight=1)
         root.grid_rowconfigure(index=0, weight=1)
@@ -46,6 +46,7 @@ def fill_table(parent, table):
     i = 0
     for row in table:
         j = 0
+        print(row)
         for cell in row:
             label = tk.Label(parent, text=cell, bd=8, bg='white')
             label.grid(column=j, row=i, padx=2, pady=2)
@@ -101,7 +102,7 @@ class TablePanel:
         t_panel = ttk.Notebook(root)
         t_panel.grid(column=0, row=0, sticky='nwse')
 
-        for i in range(6):
+        for table in tables:
             t_panel_in = tk.Frame(t_panel)
 
             canvas = tk.Canvas(t_panel_in, bg=PINK)
@@ -109,7 +110,7 @@ class TablePanel:
 
             t_panel_scroll = tk.Frame(canvas)
 
-            fill_table(t_panel_scroll, [])
+            fill_table(t_panel_scroll, table[1])
 
             scroll = ScrollBar(t_panel_in, canvas)
 
@@ -118,7 +119,7 @@ class TablePanel:
 
             t_panel.bind("<<NotebookTabChanged>>", lambda event: switch_tab(event))
 
-            t_panel.add(t_panel_in, text=str(i)+'kek')
+            t_panel.add(t_panel_in, text=table[0][4:])
 
 
 def create_window(selects, tables):
